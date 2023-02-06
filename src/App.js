@@ -1,15 +1,22 @@
 import './App.css';
 import { Button, Navbar, Container, Nav } from 'react-bootstrap';
-import Card from 'react-bootstrap/Card';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import productData from './data.js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './routes/Detail.js';
 
 function App() {
   let [dataList, setDataList] = useState(productData);
   let navigate = useNavigate();
+  let [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    console.log(inputValue);
+    if (isNaN(inputValue)) {
+      alert('그러지마세요');
+    }
+  }, [inputValue]);
 
   return (
     <>
@@ -19,7 +26,14 @@ function App() {
           element={
             <>
               <ShopNavbar navigate={navigate}></ShopNavbar>
-
+              <div>
+                <input
+                  placeholder="숫자만 입력하세요"
+                  onChange={(e) => {
+                    setInputValue(e.target.value);
+                  }}
+                />
+              </div>
               <div className="container">
                 <div className="row">
                   {dataList.map((data, i) => {
@@ -98,48 +112,48 @@ function ShopNavbar(props) {
       </Navbar>
 
       {/* 링크 내신 navigate 이용 */}
-      <button
+      <Button
         onClick={() => {
           props.navigate('/');
         }}
       >
         홈으로 이동
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={() => {
           props.navigate('/detail');
         }}
       >
         상세 페이지로 이동
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={() => {
           props.navigate('/about');
         }}
       >
         어바웃 페이지로 이동
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={() => {
           props.navigate('/event/one');
         }}
       >
         이벤트1 페이지로 이동
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={() => {
           props.navigate('/event/two');
         }}
       >
         이벤트2 페이지로 이동
-      </button>
+      </Button>
     </>
   );
 }
 
 function DataCard(props) {
   return (
-    <div className="col-md-4" key={props.key}>
+    <div className="col-md-4" key={props.data.key}>
       <img src="logo512.png" width="80%" alt={props.data.title} />
       <h4>{props.data.title}</h4>
       <p>{props.data.content}</p>
