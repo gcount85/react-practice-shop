@@ -4,14 +4,91 @@ import Card from 'react-bootstrap/Card';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import productData from './data.js';
 import { useState } from 'react';
+import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
+import Detail from './routes/Detail.js';
 
 function App() {
   let [dataList, setDataList] = useState(productData);
+  let navigate = useNavigate();
+
+  return (
+    <>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <ShopNavbar navigate={navigate}></ShopNavbar>
+
+              <div className="container">
+                <div className="row">
+                  {dataList.map((data, i) => {
+                    return <DataCard data={data} key={data.title}></DataCard>;
+                  })}
+                </div>
+              </div>
+            </>
+          }
+        />
+
+        <Route
+          path="detail"
+          element={
+            <>
+              <ShopNavbar navigate={navigate}></ShopNavbar>
+              <p>상세페이지임</p>
+              <Detail></Detail>
+            </>
+          }
+        />
+
+        <Route
+          path="/event"
+          element={
+            <>
+              <ShopNavbar navigate={navigate}></ShopNavbar>
+              <EventPage></EventPage>
+            </>
+          }
+        >
+          <Route path="one" element={<p>첫 주문시 양배추즙 서비스</p>} />
+          <Route path="two" element={<p>생일기념 쿠폰받기</p>} />
+        </Route>
+
+        <Route
+          path="/about"
+          element={
+            <>
+              <ShopNavbar navigate={navigate}></ShopNavbar>
+              <p>어바웃 페이지</p>
+            </>
+          }
+        >
+          <Route path="member" element={<div>멤버들</div>} />
+          <Route path="location" element={<div>회사위치</div>} />
+        </Route>
+
+        <Route path="*" element={<div>없는페이지임</div>} />
+      </Routes>
+    </>
+  );
+}
+
+function EventPage() {
+  return (
+    <div>
+      <h4>오늘의 이벤트</h4>
+      <Outlet></Outlet>
+    </div>
+  );
+}
+
+function ShopNavbar(props) {
   return (
     <>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+          <Navbar.Brand href="#home">다사라 쇼핑몰</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link href="#home">Home</Nav.Link>
             <Nav.Link href="#features">Features</Nav.Link>
@@ -20,20 +97,49 @@ function App() {
         </Container>
       </Navbar>
 
-      <div className="container">
-        <div className="row">
-          {dataList.map((data, i) => {
-            return <DataCard data={data}></DataCard>;
-          })}
-        </div>
-      </div>
+      {/* 링크 내신 navigate 이용 */}
+      <button
+        onClick={() => {
+          props.navigate('/');
+        }}
+      >
+        홈으로 이동
+      </button>
+      <button
+        onClick={() => {
+          props.navigate('/detail');
+        }}
+      >
+        상세 페이지로 이동
+      </button>
+      <button
+        onClick={() => {
+          props.navigate('/about');
+        }}
+      >
+        어바웃 페이지로 이동
+      </button>
+      <button
+        onClick={() => {
+          props.navigate('/event/one');
+        }}
+      >
+        이벤트1 페이지로 이동
+      </button>
+      <button
+        onClick={() => {
+          props.navigate('/event/two');
+        }}
+      >
+        이벤트2 페이지로 이동
+      </button>
     </>
   );
 }
 
 function DataCard(props) {
   return (
-    <div className="col-md-4" key={props.data.title}>
+    <div className="col-md-4" key={props.key}>
       <img src="logo512.png" width="80%" alt={props.data.title} />
       <h4>{props.data.title}</h4>
       <p>{props.data.content}</p>
