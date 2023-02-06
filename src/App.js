@@ -32,12 +32,12 @@ function App() {
         />
 
         <Route
-          path="detail"
+          path="/detail/:id"
           element={
             <>
               <ShopNavbar navigate={navigate}></ShopNavbar>
               <p>상세페이지임</p>
-              <Detail></Detail>
+              <Detail dataList={dataList}></Detail>
             </>
           }
         />
